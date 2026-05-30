@@ -68,6 +68,104 @@
             color: #475569;
             margin-top: 20px;
         }
+
+
+.report-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .report-header {
+            background: linear-gradient(135deg, #2d3e50, #1e2a3a);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .report-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        .report-header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .step {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+        .step h2 {
+            color: #2d3e50;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .screenshots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        .screenshot {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+            flex: 1 1 300px;
+        }
+        .screenshot img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+        }
+        .caption {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #475569;
+            font-style: italic;
+        }
+        code {
+            background: #eef2ff;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        .back-link {
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+        .back-link a {
+            background: #2d3e50;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 40px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        footer {
+            background: #f1f5f9;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+        @media (max-width: 640px) {
+            .content { padding: 20px; }
+            .screenshot { flex: 1 1 100%; }
+        }
+
+
+
+
     </style>
 </head>
 <body>
@@ -207,9 +305,9 @@
                 </div>
             </div>
         </div>
-
-        
 </div>
+
+
 <!-- Модальное окно -->
 <?php if ($show_modal): ?>
 <div id="credsModal" class="modal" style="display: flex;">
