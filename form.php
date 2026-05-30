@@ -290,7 +290,7 @@
     <div class="content">
         
         <div class="step">
-            <h2>🔹 1. Изменение структуры БД</h2>
+            <h2>1. Изменение структуры БД</h2>
             <p>Через команду <code>ALTER</code> были добавлены строки(Логин и пароль) в таблицу application. Скрипт выполнен в MySQL на учебном сервере.</p>
             <div class="screenshots">
                 <div class="screenshot">
