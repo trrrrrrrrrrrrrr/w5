@@ -291,13 +291,14 @@
         
         <div class="step">
             <h2>🔹 1. Изменение структуры БД</h2>
-            <p>Через команду <code>ALTER</code> были добавлены строки в таблицу application. Скрипт выполнен в MySQL на учебном сервере.</p>
+            <p>Через команду <code>ALTER</code> были добавлены строки(Логин и пароль) в таблицу application. Скрипт выполнен в MySQL на учебном сервере.</p>
             <div class="screenshots">
                 <div class="screenshot">
                     <img src="1.png" alt="Alter">
                     <div class="caption">Рис. 1 – Добавление новых строк в таблицу aaplication</div>
                 </div>
             </div>
+             <p>Через команду <code>DESC</code> просмотрели структуру таблицы application. </p>
              <div class="screenshots">
                 <div class="screenshot">
                     <img src="2.png" alt="DESC">
@@ -313,7 +314,7 @@
 <div id="credsModal" class="modal" style="display: flex;">
     <div class="modal-content">
         <span class="close-modal" id="closeModalBtn">&times;</span>
-        <h3>🎉 Регистрация успешна!</h3>
+        <h3> Регистрация успешна!</h3>
         <p>Ваши данные для входа в систему:</p>
         <p><strong>Логин:</strong> <code><?= htmlspecialchars($modal_login) ?></code></p>
         <p><strong>Пароль:</strong> <code><?= htmlspecialchars($modal_password) ?></code></p>
