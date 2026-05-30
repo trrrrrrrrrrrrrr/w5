@@ -90,7 +90,7 @@ try {
                     <td><?= htmlspecialchars($app['birth_date']) ?></td>
                     <td><?= $app['gender'] === 'male' ? 'Мужской' : 'Женский' ?></td>
                     <td><?= nl2br(htmlspecialchars($app['biography'])) ?></td>
-                    <td><?= $app['contract_accepted'] ? '✅ Да' : '❌ Нет' ?></td>
+                    <td><?= $app['contract_accepted'] ? ' Да' : '' ?></td>
                     <td><?= htmlspecialchars($app['languages']) ?></td>
                     <td><?= htmlspecialchars($app['created_at']) ?></td>
                 </tr>
