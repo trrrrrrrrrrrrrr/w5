@@ -7,13 +7,27 @@ header('Content-Type: text/html; charset=UTF-8');
 $is_logged_in = isset($_SESSION['user_id']);
 $user_id = $is_logged_in ? $_SESSION['user_id'] : null;
 
+// Проверяем, есть ли временные данные для показа модалки
+$show_modal = false;
+$modal_login = '';
+$modal_password = '';
+if (isset($_SESSION['new_user_creds'])) {
+    $show_modal = true;
+    $modal_login = $_SESSION['new_user_creds']['login'];
+    $modal_password = $_SESSION['new_user_creds']['password'];
+    unset($_SESSION['new_user_creds']); // удаляем после чтения
+}
+
+
+
+
 $form_data = [
     'full_name' => '', 'phone' => '', 'email' => '', 'birth_date' => '',
     'gender' => '', 'biography' => '', 'contract_accepted' => false, 'languages' => []
 ];
 $errors = [];
 $success_message = '';
-$generated_creds = null; // для хранения логина/пароля при первой отправке
+
 
 $allowed_languages = getAllowedLanguages();
 $allowed_genders = getAllowedGenders();
@@ -170,7 +184,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
                 $app_id = $pdo->lastInsertId();
                 $success_message = 'Данные успешно сохранены!';
-                $generated_creds = ['login' => $login, 'password' => $plain_password];
+                
+                  // Сохраняем учетные данные в сессию для модального окна
+                $_SESSION['new_user_creds'] = ['login' => $login, 'password' => $plain_password];
                 
                 // Автоматически авторизуем пользователя
                 $_SESSION['user_id'] = $app_id;
@@ -218,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Перенаправляем GET-запросом, чтобы избежать повторной отправки формы
-            header('Location: index.php?success=1');
+             header('Location: index.php');
             exit;
         } catch (Exception $e) {
             $pdo->rollBack();
