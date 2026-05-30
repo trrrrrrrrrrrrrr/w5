@@ -37,7 +37,7 @@ function generateUniqueLogin($pdo) {
     return $login;
 }
 
-// Генерация случайного пароля (8 символов)
+//Генерация случайного пароля (8 символов)
 function generatePassword() {
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     return substr(str_shuffle($chars), 0, 8);

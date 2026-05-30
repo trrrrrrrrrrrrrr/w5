@@ -105,7 +105,7 @@
                 <input type="text" id="full_name" name="full_name" value="<?= htmlspecialchars($form_data['full_name']) ?>" required>
             </div>
             
- <!-- Телефон -->
+            <!-- Телефон -->
             <div class="input-group">
                 <label for="phone">Телефон <span class="required">*</span></label>
                 <input type="tel" id="phone" name="phone" 
@@ -198,14 +198,14 @@
     </div>
 </div>
 <script>
-    // Закрытие только по крестику (не по клику на фон)
+    
     document.getElementById('closeModalBtn').onclick = function() {
         document.getElementById('credsModal').style.display = 'none';
     };
-    // Запрещаем закрытие по клику вне окна (убираем обработчик)
+    //Запрещаем закрытие по клику вне окна
     document.getElementById('credsModal').onclick = function(e) {
         if (e.target === this) {
-            // Ничего не делаем, модалка не закроется
+            
         }
     };
 </script>

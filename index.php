@@ -7,7 +7,7 @@ header('Content-Type: text/html; charset=UTF-8');
 $is_logged_in = isset($_SESSION['user_id']);
 $user_id = $is_logged_in ? $_SESSION['user_id'] : null;
 
-// Проверяем, есть ли временные данные для показа модалки
+//Проверяем, есть ли временные данные для показа модалки
 $show_modal = false;
 $modal_login = '';
 $modal_password = '';
@@ -32,7 +32,7 @@ $success_message = '';
 $allowed_languages = getAllowedLanguages();
 $allowed_genders = getAllowedGenders();
 
-// Если авторизован, загружаем данные из БД для отображения в форме
+//Если авторизован, загружаем данные из БД для отображения в форме
 if ($is_logged_in && $_SERVER['REQUEST_METHOD'] !== 'POST') {
     $pdo = getDB();
     $stmt = $pdo->prepare("SELECT * FROM application WHERE id = ?");
@@ -47,14 +47,14 @@ if ($is_logged_in && $_SERVER['REQUEST_METHOD'] !== 'POST') {
         $form_data['biography'] = $user['biography'];
         $form_data['contract_accepted'] = (bool)$user['contract_accepted'];
         
-        // Загрузка языков
+        //Загрузка языков
         $stmt_lang = $pdo->prepare("SELECT l.name FROM application_language al JOIN language l ON al.language_id = l.id WHERE al.application_id = ?");
         $stmt_lang->execute([$user_id]);
         $form_data['languages'] = $stmt_lang->fetchAll(PDO::FETCH_COLUMN);
     }
 }
 
-// Обработка POST-запроса (сохранение или обновление)
+//Обработка POST-запроса (сохранение или обновление)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Получение данных из формы
     $form_data['full_name'] = trim($_POST['full_name'] ?? '');
@@ -66,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form_data['contract_accepted'] = isset($_POST['contract_accepted']);
     $form_data['languages'] = $_POST['languages'] ?? [];
 
-    // Валидация (общая для создания и обновления)
-    // ФИО
+    //Валидация
+    //ФИО
     if (empty($form_data['full_name'])) {
         $errors['full_name'] = 'ФИО обязательно для заполнения.';
     } elseif (!preg_match('/^[а-яА-Яa-zA-Z\s]+$/u', $form_data['full_name'])) {
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['full_name'] = 'ФИО не должно превышать 150 символов.';
     }
 
-    // Телефон
+    //Телефон
     if (empty($form_data['phone'])) {
         $errors['phone'] = 'Телефон обязателен.';
     } else {
@@ -87,14 +87,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Email
+    //Email
     if (empty($form_data['email'])) {
         $errors['email'] = 'Email обязателен.';
     } elseif (!filter_var($form_data['email'], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Некорректный формат email.';
     }
 
-    // Дата рождения
+    //Дата рождения
     if (empty($form_data['birth_date'])) {
         $errors['birth_date'] = 'Дата рождения обязательна.';
     } else {
@@ -106,14 +106,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Пол
+    //Пол
     if (empty($form_data['gender'])) {
         $errors['gender'] = 'Выберите пол.';
     } elseif (!in_array($form_data['gender'], $allowed_genders)) {
         $errors['gender'] = 'Недопустимое значение пола.';
     }
 
-    // Языки
+    //Языки
     if (empty($form_data['languages'])) {
         $errors['languages'] = 'Выберите хотя бы один язык программирования.';
     } else {
@@ -125,24 +125,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Биография
+    //Биография
     if (strlen($form_data['biography']) > 10000) {
         $errors['biography'] = 'Биография не должна превышать 10000 символов.';
     }
 
-    // Чекбокс согласия
+    //Чекбокс согласия
     if (!$form_data['contract_accepted']) {
         $errors['contract_accepted'] = 'Необходимо подтвердить ознакомление с контрактом.';
     }
 
-    // Если ошибок нет – сохраняем или обновляем
+    //Если ошибок нет сохраняем или обновляем
     if (empty($errors)) {
         try {
             $pdo = getDB();
             $pdo->beginTransaction();
 
             if ($is_logged_in) {
-                // Обновление существующей записи
+                //Обновление существующей записи
                 $stmt = $pdo->prepare("
                     UPDATE application 
                     SET full_name = ?, phone = ?, email = ?, birth_date = ?, gender = ?, biography = ?, contract_accepted = ?
@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $app_id = $user_id;
                 $success_message = 'Данные успешно обновлены!';
             } else {
-                // Генерация логина и пароля
+                //Генерация логина и пароля
                 $login = generateUniqueLogin($pdo);
                 $plain_password = generatePassword();
                 $password_hash = password_hash($plain_password, PASSWORD_DEFAULT);
@@ -185,16 +185,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $app_id = $pdo->lastInsertId();
                 $success_message = 'Данные успешно сохранены!';
                 
-                  // Сохраняем учетные данные в сессию для модального окна
+                  //Сохраняем учетные данные в сессию для модального окна
                 $_SESSION['new_user_creds'] = ['login' => $login, 'password' => $plain_password];
                 
-                // Автоматически авторизуем пользователя
+                //втоматически авторизуем пользователя
                 $_SESSION['user_id'] = $app_id;
                 $is_logged_in = true;
                 $user_id = $app_id;
             }
 
-            // Обновление языков (удаляем старые связи и вставляем новые)
+            //Обновление языков (удаляем старые связи и вставляем новые)
             $pdo->prepare("DELETE FROM application_language WHERE application_id = ?")->execute([$app_id]);
             $lang_map = [];
             $stmt = $pdo->query("SELECT id, name FROM language");
@@ -210,8 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdo->commit();
 
-            // Сохраняем успешные данные в cookies (как в 4-й лабе) для неавторизованных,
-            // но для авторизованных тоже можно (опционально). Для простоты сохраняем в любом случае.
+            //Сохраняем успешные данные в cookies (как в 4-й лабе) для неавторизованных
             setcookie('full_name', $form_data['full_name'], time() + 365*24*3600, '/');
             setcookie('phone', $form_data['phone'], time() + 365*24*3600, '/');
             setcookie('email', $form_data['email'], time() + 365*24*3600, '/');
@@ -221,19 +220,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             setcookie('contract_accepted', $form_data['contract_accepted'] ? '1' : '0', time() + 365*24*3600, '/');
             setcookie('languages', implode(',', $form_data['languages']), time() + 365*24*3600, '/');
 
-            // Очищаем ошибки в cookies, если они были
+            //Очищаем ошибки в cookies, если они были
             $error_fields = ['full_name', 'phone', 'email', 'birth_date', 'gender', 'languages', 'biography', 'contract_accepted'];
             foreach ($error_fields as $field) {
                 setcookie($field . '_error', '', time() - 3600, '/');
                 setcookie($field . '_value', '', time() - 3600, '/');
             }
 
-            // Если это была первая отправка и сгенерированы учётные данные – покажем их
+            //Если это была первая отправка и сгенерированы учётные данные – покажем их
             if ($generated_creds) {
                 $success_message .= " Ваш логин: {$generated_creds['login']}, пароль: {$generated_creds['password']}. Запомните их для входа.";
             }
 
-            // Перенаправляем GET-запросом, чтобы избежать повторной отправки формы
+            //Перенаправляем GET-запросом, чтобы избежать повторной отправки формы
              header('Location: index.php');
             exit;
         } catch (Exception $e) {
@@ -241,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors['db'] = 'Ошибка БД: ' . $e->getMessage();
         }
     } else {
-        // При ошибках сохраняем значения в cookies для отображения в форме
+        //При ошибках сохраняем значения в cookies для отображения в форме
         foreach ($form_data as $field => $value) {
             if (is_array($value)) {
                 setcookie($field . '_value', implode(',', $value), time() + 3600, '/');
@@ -257,7 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Чтение cookies для полей при GET-запросе (если не авторизован)
+//Чтение cookies для полей при GET-запросе (если не авторизован)
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !$is_logged_in) {
     $cookie_fields = ['full_name', 'phone', 'email', 'birth_date', 'gender', 'biography', 'contract_accepted'];
     foreach ($cookie_fields as $field) {
@@ -268,7 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !$is_logged_in) {
     if (isset($_COOKIE['languages_value'])) {
         $form_data['languages'] = explode(',', $_COOKIE['languages_value']);
     }
-    // Чтение ошибок из cookies
+    //Чтение ошибок из cookies
     foreach ($cookie_fields as $field) {
         if (isset($_COOKIE[$field . '_error'])) {
             $errors[$field] = $_COOKIE[$field . '_error'];
@@ -282,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !$is_logged_in) {
     }
 }
 
-// Если есть параметр success в URL, показываем сообщение об успехе
+//сли есть параметр success в URL, показываем сообщение об успехе
 if (isset($_GET['success'])) {
     $success_message = 'Данные успешно сохранены!';
 }
