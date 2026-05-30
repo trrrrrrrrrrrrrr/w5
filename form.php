@@ -184,7 +184,32 @@
         </div>
     </div>
 </div>
+<div class="report-container">
+    <div class="report-header">
+        <h1> Лабораторная работа №5</h1>
+        <p>Работа с базой данных MySQL</p>
+    </div>
+    <div class="content">
+        
+        <div class="step">
+            <h2>🔹 1. Изменение структуры БД</h2>
+            <p>Через команду <code>ALTER</code> были добавлены строки в таблицу application. Скрипт выполнен в MySQL на учебном сервере.</p>
+            <div class="screenshots">
+                <div class="screenshot">
+                    <img src="1.png" alt="Alter">
+                    <div class="caption">Рис. 1 – Добавление новых строк в таблицу aaplication</div>
+                </div>
+            </div>
+             <div class="screenshots">
+                <div class="screenshot">
+                    <img src="2.png" alt="DESC">
+                    <div class="caption">Рис. 2 – Просмотр структуры таблицы application</div>
+                </div>
+            </div>
+        </div>
 
+        
+</div>
 <!-- Модальное окно -->
 <?php if ($show_modal): ?>
 <div id="credsModal" class="modal" style="display: flex;">
